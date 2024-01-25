@@ -1,0 +1,296 @@
+#
+# Start by declaring vars
+#
+set $mod Mod4
+set $dom Alt
+set $bg-color #1e1e2e
+set $inactive-bg-color #1e1e2e
+set $text-color #ffffff
+set $inactive-text-color #aaaaaa
+set $urgent-bg-color #fe640b
+set $color-a #fe640b
+set $color-b #f4b8e4
+set $refresh_i3status killall -SIGUSR1 i3status
+#set $ws1 " : Terminals"
+set $ws1 ""
+#set $ws2 " : Web"
+set $ws2 ""
+#  _NET_WM_DESKTOP
+#set $ws3 " : Coding"
+set $ws3 ""
+#set $ws4 " : Floating"
+set $ws4 ""
+#set $ws5 " : Full Screen"
+set $ws5 " "
+#set $ws6 " : Communication"
+set $ws6 ""
+#set $ws7 " : Random"
+set $ws7 ""
+#set $ws8 " : Performance"
+set $ws8 ""
+#set $ws9 " : Settings"
+set $ws9 ""
+#set $ws10 " : Games"
+set $ws10 ""
+
+#
+# Fonts 
+#
+font pango:monospace 8
+# font Product Sans 8
+#font pango:DejaVu Sans Mono 8
+
+#
+# Exec apps 
+#
+# exec_always --no-startup-id killall polybar
+exec_always feh --bg-fill /home/makano/.config/background
+exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id nm-applet
+exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Disable While Typing Enabled" 0
+exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+exec xinput set-prop "YSPRINGTECH USB OPTICAL MOUSE" "libinput Natural Scrolling Enabled" 1
+exec xset s off 
+exec tilda
+#exec alacritty
+#exec alacritty -e nnn
+#exec alacritty -e htop
+# exec --no-startup-id picom --config $HOME/.config/picom.conf
+# exec --no-startup-id bash ~/.config/polybar/launch.sh --shapes
+# exec_always --no-startup-id polybar -c ~/.config/polybar/mocha.ini right
+# exec_always --no-startup-id polybar -c ~/.config/i3/mocha.ini main
+# -- poollyy polybar -c ~/.config/i3/mocha.ini main & polybar -c ~/.config/i3/mocha.ini right
+# exec --no-startup-id picom --config $HOME/.config/picom.conf --legacy-backends
+exec ~/.config/polybar/launch.sh --blocks
+# exec --no-startup-id stalonetray
+
+#
+# Modif
+#
+gaps inner 6
+gaps outer 0
+floating_modifier $mod
+tiling_drag modifier titlebar
+for_window [class="^.*"] border pixel 0
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+mode "stfu" {
+        bindsym Ctrl+S exec shutdown now
+        bindsym r exec shutdown -r 0
+        bindsym l exec i3-msg exit
+
+        bindsym Escape mode "default"
+        bindsym $mod+BackSpace mode "default"
+        bindsym XF86PowerOff mode "default"
+}
+
+
+#
+# Bindsym
+#
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+#apps
+bindsym $mod+Return exec tilix
+bindsym $mod+z exec caja
+bindsym $mod+shift+f exec firefox
+bindsym $mod+t exec alacritty
+# bindsym Alt+t exec alacritty
+bindsym $mod+b exec chromium
+bindsym $mod+shift+z exec chromium
+bindsym $mod+c exec code
+bindsym $mod+Escape exec alacritty -e htop
+bindsym $mod+Shift+Escape exec alacritty -e bpytop
+bindsym $mod+Shift+b exec polybar-msg cmd toggle
+bindsym Print exec flameshot gui
+
+#kill
+bindsym $mod+q kill
+
+#dmenu
+# bindsym $mod+d exec --no-startup-id dmenu_run -nb "#221f26" -nf "#d8c4f1" -sb "#d8c4f1" -sf "#221f26"
+bindsym $mod+d exec --no-startup-id dmenu_run -nb "#1e1e2e" -nf "#cdd6f4" -sb "#89dceb" -sf "#1e1e2e"
+# bindsym $mod+i exec --no-startup-id ~/.config/i3/showstats.sh
+# bindsym $mod+r exec --no-startup-id rofi -show drun
+bindsym $mod+shift+d exec --no-startup-id rofi -show drun
+# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
+# bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
+
+#lock
+bindsym $mod+shift+x exec i3lock
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
+bindsym $mod+Tab workspace back_and_forth
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+bindsym $mod+alt+Left workspace prev
+bindsym $mod+alt+Right workspace next
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+# bindsym $mod+alt+left move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+# bindsym $mod+Alt+right move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit?' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec ~/.config/i3/exit.sh
+# resize window
+bindsym $mod+r mode "resize"
+
+bindsym $mod+g exec ~/.config/i3/resize.sh
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec brightnessctl set +20% # increase screen brightness
+bindsym XF86MonBrightnessDown exec brightnessctl set 20%- # decrease screen brightness
+# Touchpad controls
+bindsym XF86TouchpadToggle exec /home/bushyice/.confog/i3/toggletouchpad.sh # toggle touchpad
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+# stfu
+bindsym $mod+BackSpace mode "stfu"
+bindsym XF86PowerOff mode "stfu"
+
+#
+# Apps
+#
+assign[class="firefox"] $ws2 
+assign[class="Google-chrome"] $ws2 
+assign[class="google-chrome"] $ws2
+assign[class="chromium"] $ws2
+assign[class="Chromium"] $ws2
+assign[class="code-oss"] $ws3
+assign[class="Sublime_text"] $ws3
+assign[class="TelegramDesktop"] $ws4
+for_window [workspace=$ws6] floating enable
+for_window [class="latte-dock"] floating enable
+workspace_auto_back_and_forth yes
+
+#
+# Colors
+#
+client.focused $bg-color $bg-color $text-color
+client.unfocused $inactive-bg-color $inactive-bg-color $inactive-text-color
+client.focused_inacive $inactive-bg-color $inactive-bg-color $inactive-text-color
+client.urgent $urgent-bg-color $urgent-bg-color $text-color
+
+
+#
+# Bar
+#
+# bar {
+	# colors {
+		# background $bg-color
+		# separator #757575
+# 
+		# focused_workspace $color-b $color-b $bg-color
+		# inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		# urgent_workspace $urgent-bg-color $urgent-bg-color $text-color
+	# }
+	# status_command i3status
+	#status_command ~/programs/bumblebee-status/bumblebee-status -m cpu memory battery time \
+	#	pasink -p time.format="%H:%M" -t dracula-powerline
+# }
+# bar{
+	# i3bar_command polybar -q bottom -c ~/.config/polybar/mocha.ini
+# }
+
