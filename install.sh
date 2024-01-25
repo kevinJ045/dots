@@ -49,12 +49,13 @@ function print(){
 		g=$default
 	fi
 
-	if [ '$*' == '' ]; then
-		g=$default
+	if [ $# -eq 0 ]; then
+		g=$empty
 	fi
 	
 	color_text $g ${all[*]}
 }
+
 
 function color_text() {
     text=${@:1:$#-1}
@@ -266,19 +267,26 @@ packages_to_install=(
 )
 
 
-if [ "$EUID" -ne 0 ]; then
-    print "Please run this script with sudo." bred e
-    exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#     print "Please run this script with sudo." bred e
+#     exit 1
+# fi
 
-
+print
 print Initiating package installation byellow
 
 
 function install_packages(){
+	print
+	print Installing packages byellow
+	sudo -v
+	if [ $? -eq 1 ]; then
+		exit
+	fi
+	print
 	installer_pid=''
 	show_loading
-	yes | pacman -Syuu ${packages_to_install[@]} > /dev/null 2>&1 &
+	yes | sudo pacman -Syuu ${packages_to_install[@]} > /dev/null 2>&1 &
 	installer_pid=$!
 	wait $installer_pid
 	if [ $? -eq 0 ]; then
@@ -295,4 +303,28 @@ function install_packages(){
 
 install_packages
 
-print e
+print
+print Copying config files bblue
+print
+
+function copy_configs(){
+	CONFIGPATH=$HOME/.config
+	
+	show_loading
+	
+	cp -r ./nvim $CONFIGPATH
+	cp -r ./rofi $CONFIGPATH
+	cp -r ./tmux $CONFIGPATH
+	cp -r ./waybar $CONFIGPATH
+	cp -r ./alacritty $CONFIGPATH
+	cp -r ./i3 $CONFIGPATH
+	cp -r ./tilda $CONFIGPATH
+	cp -r ./sway $CONFIGPATH
+	cp -r ./picom.conf $CONFIGPATH
+	
+	hide_loading "Config files has been copied" bgreen
+}
+
+copy_configs
+
+print Makanoized your arch bgreen e
